@@ -84,10 +84,12 @@ class BinaryChoiceSimplePage(Page):
     def js_vars(player: Player):
         return dict(
             prob_up=choices_data[f"choice_{player.round_number}"]["prob_up"],
-            prob_down=100 - choices_data[f"choice_{player.round_number}"]["prob_up"],
             pay_up=choices_data[f"choice_{player.round_number}"]["pay_up"],
             pay_down=choices_data[f"choice_{player.round_number}"]["pay_down"],
             pay_certain=choices_data[f"choice_{player.round_number}"]["pay_certain"],
+            lables_choice_list=choices_data[f"choice_{player.round_number}"][
+                "lables_choice_list"
+            ],
         )
 
 
@@ -110,9 +112,9 @@ class BinaryChoiceListPage(Page):
     def js_vars(player: Player):
         return dict(
             prob_up=choices_data[f"choice_{player.round_number}"]["prob_up"],
-            prob_down=100 - choices_data[f"choice_{player.round_number}"]["prob_up"],
             pay_up=choices_data[f"choice_{player.round_number}"]["pay_up"],
             pay_down=choices_data[f"choice_{player.round_number}"]["pay_down"],
+            pay_certain=choices_data[f"choice_{player.round_number}"]["pay_certain"],
             lables_choice_list=choices_data[f"choice_{player.round_number}"][
                 "lables_choice_list"
             ],
@@ -128,18 +130,27 @@ class PayoffPage(Page):
     def vars_for_template(player: Player):
         selected_round = random.randrange(4)  # randomly select a round
         selected_choice = choices_data[f"choice_{selected_round + 1}"]
+        player.participant.vars["selected_choice"] = selected_choice
         print(selected_choice)
         if selected_choice["type"] == "simple":
             if (
                 player.in_round(selected_round + 1).binary_choice_simple_choose_risky
                 == 0
-            ):  # participant chose Option A
+            ):  # participant chose Option B
+                chosen_text = "You chose the safe Option B"
                 player.payoff = selected_choice["pay_certain"]
-            else:  # Player chose Option B
+            else:  # Player chose Option A
                 rnd_draw = random.randrange(1, 101)
+
                 if rnd_draw <= selected_choice["prob_up"]:
+                    chosen_text = (
+                        "You chose the risky Option A and won the higher bonus."
+                    )
                     player.payoff = selected_choice["pay_up"]
                 else:
+                    chosen_text = (
+                        "You chose the risky Option B and won the lower bonus."
+                    )
                     player.payoff = selected_choice["pay_down"]
         elif selected_choice["type"] == "list":
             rnd_offer = random.choice(selected_choice["lables_choice_list"])
@@ -148,14 +159,38 @@ class PayoffPage(Page):
                 >= player.in_round(selected_round + 1).binary_choice_list_choose_risky
             ):  # the random number is bigger than the biggest Option A - value in the price list ==> Receive Option B
                 player.payoff = rnd_offer
+                chosen_text = f"You chose the safe Option B if it was higher than {player.in_round(selected_round + 1).binary_choice_list_choose_risky}. An offer of {rnd_offer} was randomly made meaning that you receive Option B."
+
             else:  # ==> Receive Option A (resolved like for simple question)
                 rnd_draw = random.randrange(1, 101)
                 if rnd_draw <= selected_choice["prob_up"]:
+                    chosen_text = f"You chose the safe Option B if it was higher than {player.in_round(selected_round + 1).binary_choice_list_choose_risky}. An offer of {rnd_offer} was randomly made meaning that you receive Option A. You won the higher bonus."
+
                     player.payoff = selected_choice["pay_up"]
                 else:
+                    chosen_text = f"You chose the safe Option B if it was higher than {player.in_round(selected_round + 1).binary_choice_list_choose_risky}. An offer of {rnd_offer} was randomly made meaning that you receive Option A. You won the lower bonus."
+
                     player.payoff = selected_choice["pay_down"]
         print(player.payoff)
-        return {"selected_round": selected_round + 1, "payoff": player.payoff}
+
+        return {
+            "chosen_text": chosen_text,
+            "selected_round": selected_round + 1,
+            "payoff": player.payoff,
+            "round_type": selected_choice["type"],
+        }
+
+    @staticmethod
+    def js_vars(player: Player):
+        selected_choice = player.participant.vars["selected_choice"]
+        return dict(
+            prob_up=selected_choice["prob_up"],
+            pay_up=selected_choice["pay_up"],
+            pay_down=selected_choice["pay_down"],
+            pay_certain=selected_choice["pay_certain"],
+            lables_choice_list=selected_choice["lables_choice_list"],
+            round_type=selected_choice["type"],
+        )
 
 
 page_sequence = [

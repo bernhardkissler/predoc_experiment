@@ -6,6 +6,56 @@ What you won
 {{ endblock }}
 {{ block content }}
 
+<!-- Load React -->
+<script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+
+<!-- Load Babel -->
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+<!-- Load ChoiceList and ChoiceSimple Component -->
+<script type="text/babel" src="{{ static 'global/choice_list.js'}}"></script>
+<script type="text/babel" src="{{ static 'global/choice_simple.js'}}"></script>
+<p>
+    Round {{selected_round}} was randomly selected to determine your bonus. In it you were offered the following
+    options:
+</p>
+
+<div id="root"></div>
+
+<p>
+    {{chosen_text}}
+</p>
+<p>
+    Therefore, your payoff is {{player.payoff|to0}}
+</p>
+
+
+<script type="text/babel">
+    class WrapperPage extends React.Component {
+        render() {
+            let options
+            if (this.props.type == "simple") {
+                options = <ChoiceSimple prob_up={js_vars.prob_up} pay_up={js_vars.pay_up} pay_down={js_vars.pay_down}
+                    pay_certain={js_vars.pay_certain} />
+            } else {
+                options = <ChoiceList prob_up={js_vars.prob_up} pay_up={js_vars.pay_up} pay_down={js_vars.pay_down} initialListItems={js_vars.lables_choice_list.length} listLabels={js_vars.lables_choice_list} />
+            }
+            return (
+                <div>
+                    {options}
+                </div>
+            )
+        }
+    }
+
+
+
+    ReactDOM.render(<WrapperPage type={js_vars.round_type} />, document.getElementById('root'));
+
+
+</script>
+
 
 
 {{ endblock }}
