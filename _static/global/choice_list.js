@@ -45,7 +45,7 @@ class ChoiceList extends React.Component {
                         <input type="radio" onClick={this.oneChangeHandler} id={"group_" + i + "0"} value={i + 1} name={"group_" + i} /> &emsp;
                         <input type="radio" onClick={this.oneChangeHandler} id={"group_" + i + "1"} value={i} name={"group_" + i} />
                     </td>
-                    <td className="text-center align-middle">With certainty: <strong>Get ${i}</strong></td>
+                    <td className="text-center align-middle">With certainty: <strong>Get ${this.props.listLabels[i]}</strong></td>
                 </tr>
             )
         }

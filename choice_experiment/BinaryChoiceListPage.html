@@ -27,7 +27,7 @@ A bit trickier
         render() {
             return (
                 <div>
-                    <ChoiceList prob_up={70} win_up={20} win_down={0} initialListItems={21} />
+                    <ChoiceList prob_up={js_vars.prob_up} win_up={js_vars.win_up} win_down={js_vars.win_down} initialListItems={js_vars.lables_choice_list.length} listLabels={js_vars.lables_choice_list} />
                 </div>
             )
         }

@@ -37,6 +37,8 @@ class Player(BasePlayer):
     )  # Encodes the number of safe options (on the right side) for which the participant prefers the risky option
 
 
+from choice_experiment.question_data import choices_data
+
 # PAGES
 class WelcomePage(Page):
     @staticmethod
@@ -76,6 +78,16 @@ class BinaryChoiceSimplePage(Page):
             player.round_number in [1, 2, 3]
         )
 
+    @staticmethod
+    def vars_for_template(player: Player):
+        return dict(
+            prob_up=choices_data[f"choice_{player.round_number}"]["prob_up"],
+            prob_down=100 - choices_data[f"choice_{player.round_number}"]["prob_up"],
+            win_up=choices_data[f"choice_{player.round_number}"]["win_up"],
+            win_down=choices_data[f"choice_{player.round_number}"]["win_down"],
+            certain_pay=choices_data[f"choice_{player.round_number}"]["certain_pay"],
+        )
+
 
 class BinaryChoiceListPage(Page):
     form_model = "player"
@@ -91,6 +103,18 @@ class BinaryChoiceListPage(Page):
     def error_message(player, values):
         if values["binary_choice_list_choose_risky"] == -9999:
             return "Please enter your preference before trying to proceed."
+
+    @staticmethod
+    def js_vars(player: Player):
+        return dict(
+            prob_up=choices_data[f"choice_{player.round_number}"]["prob_up"],
+            prob_down=100 - choices_data[f"choice_{player.round_number}"]["prob_up"],
+            win_up=choices_data[f"choice_{player.round_number}"]["win_up"],
+            win_down=choices_data[f"choice_{player.round_number}"]["win_down"],
+            lables_choice_list=choices_data[f"choice_{player.round_number}"][
+                "lables_choice_list"
+            ],
+        )
 
 
 class PayoffPage(Page):
