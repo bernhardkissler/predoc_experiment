@@ -120,15 +120,10 @@ class BinaryChoiceListPage(Page):
             ],
         )
 
-
-class PayoffPage(Page):
     @staticmethod
-    def is_displayed(player: Player):
-        return player.round_number == 4
-
-    @staticmethod
-    def vars_for_template(player: Player):
+    def before_next_page(player: Player, timeout_happened):
         selected_round = random.randrange(4)  # randomly select a round
+        player.participant.vars["selected_round"] = selected_round
         selected_choice = choices_data[f"choice_{selected_round + 1}"]
         player.participant.vars["selected_choice"] = selected_choice
         print(selected_choice)
@@ -141,7 +136,6 @@ class PayoffPage(Page):
                 player.payoff = selected_choice["pay_certain"]
             else:  # Player chose Option A
                 rnd_draw = random.randrange(1, 101)
-
                 if rnd_draw <= selected_choice["prob_up"]:
                     chosen_text = (
                         "You chose the risky Option A and won the higher bonus."
@@ -177,6 +171,19 @@ class PayoffPage(Page):
                         chosen_text = f"You chose the safe Option B if it was higher than ${player_offer}. An offer of ${rnd_offer} was randomly made meaning that you receive Option A. You won the lower bonus."
                     player.payoff = selected_choice["pay_down"]
         print(player.payoff)
+        player.participant.vars["chosen_text"] = chosen_text
+
+
+class PayoffPage(Page):
+    @staticmethod
+    def is_displayed(player: Player):
+        return player.round_number == 4
+
+    @staticmethod
+    def vars_for_template(player: Player):
+        selected_choice = player.participant.vars["selected_choice"]
+        selected_round = player.participant.vars["selected_round"]
+        chosen_text = player.participant.vars["chosen_text"]
 
         return {
             "chosen_text": chosen_text,
