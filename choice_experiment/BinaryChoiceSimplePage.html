@@ -6,39 +6,35 @@ A simple choice?
 {{ endblock }}
 {{ block content }}
 
-<div id="decision_table">
-    <table class="table table-bordered border-secondary">
-        <thead>
-            <tr>
-                <td class="text-center align-middle">
-                    <strong>
-                        Option A
-                    </strong>
-                </td>
-                <td class="text-center align-middle">
-                    <strong>
-                        Option B
-                    </strong>
-                </td>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td style="width: 50%;" class="text-center align-middle">
-                    With probability <strong>{{prob_up}}%</strong>: Get <strong>${{pay_up}}</strong>
-                    <br>
-                    With probability <strong>{{prob_down}}%</strong>: Get <strong>${{pay_down}}</strong>
-                </td>
-                <td style="width: 50%;" class="text-center align-middle">
-                    Get <strong>${{pay_certain}}</strong> for certain (100%)
+<div id="root"></div>
+
+<!-- Load React -->
+<script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+
+<!-- Load Babel -->
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+<!-- Load ChoiceList Component -->
+<script type="text/babel" src="{{ static 'global/choice_simple.js'}}"></script>
+
+<script type="text/babel">
+    class WrapperPage extends React.Component {
+        render() {
+            return (
+                <div>
+                    <ChoiceSimple prob_up={js_vars.prob_up} prob_down={js_vars.prob_down} pay_up={js_vars.pay_up} pay_down={js_vars.pay_down} pay_certain={js_vars.pay_certain} />
+                </div>
+            )
+        }
+    }
 
 
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    ReactDOM.render(<WrapperPage />, document.getElementById('root'));
 
-</div>
+
+</script>
+
 {{ formfields }}
 
 

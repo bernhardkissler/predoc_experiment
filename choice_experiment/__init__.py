@@ -81,7 +81,7 @@ class BinaryChoiceSimplePage(Page):
         )
 
     @staticmethod
-    def vars_for_template(player: Player):
+    def js_vars(player: Player):
         return dict(
             prob_up=choices_data[f"choice_{player.round_number}"]["prob_up"],
             prob_down=100 - choices_data[f"choice_{player.round_number}"]["prob_up"],
