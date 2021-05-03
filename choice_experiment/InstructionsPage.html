@@ -6,15 +6,106 @@ What your are going to do
 {{ endblock }}
 {{ block content }}
 
-<p>TODOS
-
-<ul>
-    <li>Explain first choice type (including Pictures?)</li>
-    <li>Explain second choice type (let them try?)</li>
-</ul>
+<p>
+    During the experiment you will make two types of choices. For each choice you will presented with a risky option A
+    and a certain option B and be asked which one you prefer. In the end of the experiment, we will randomly select one
+    of the choices you made to calculate your payoff. That means any of your choices could determine you payoff and you
+    should think about any single one of them carefully.
 </p>
+<p>
+    The risky options will always take the form of a so called lottery. In this experiment, the lotteries will always
+    present two options, one offering a high bonus and one offering a low bonus:
 
-{{ formfields }}
-{{ next_button }}
+</p>
+<p class="text-center">
+    With probability <strong>45%:</strong> Get <strong>$19</strong> <br>
+    With probability <strong>55%:</strong> Get <strong>$6</strong>
+</p>
+<p>
+    If at the end of the experiment a round is selected to determine your payoff in which you chose the risky option A,
+    this risky option itself is also resolved randomly.
+</p>
+<p>
+    While the risky options will always look the same, there are two different ways we will present the certain options.
+    The first three choices you make will present the certain options similarly to the lotteries and your choice will
+    look like this:
+</p>
+<div id="decision_table">
+    <table class="table table-bordered border-secondary">
+        <thead>
+            <tr>
+                <td class="text-center align-middle">
+                    <strong>
+                        Option A
+                    </strong>
+                </td>
+                <td class="text-center align-middle">
+                    <strong>
+                        Option B
+                    </strong>
+                </td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="width: 50%;" class="text-center align-middle">
+                    With probability <strong>70%</strong>: Get <strong>$20</strong>
+                    <br>
+                    With probability <strong>30%</strong>: Get <strong>$0</strong>
+                </td>
+                <td style="width: 50%;" class="text-center align-middle">
+                    Get <strong>$8</strong> for certain (100%)
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <p>
+        In these rounds, you will simply be asked which of the two options you prefer.
+    </p>
+    <p>
+        In the last (4<sup>th</sup>) choice, the certain option will be presented as a list. You will then be
+        asked to indicate for each row whether you prefer the risky option A on the left or the certain option B on the
+        right. You indicate your preferences by clicking either on the left button or the right one. The bottom most row
+        gives you instant feedback on how we interpret your inputs. <br>
+        The list below is not connected to any of your choices. Feel free to play around with it to get a feeling for
+        the way it works.
+    </p>
+    <p>
+        <input type="hidden" id="binary_choice_list_choose_risky" name="binary_choice_list_choose_risky"
+            value="-9999"></input>
+    <div id="root"></div>
+    </p>
 
-{{ endblock }}
+
+    <!-- Load React -->
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+
+    <!-- Load Babel -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- Load ChoiceList Component -->
+    <script type="text/babel" src="{{ static 'global/choice_list.js'}}"></script>
+
+    <script type="text/babel">
+        class WrapperPage extends React.Component {
+            render() {
+                return (
+                    <div>
+                        <ChoiceList prob_up={50} win_up={15} win_down={3} initialListItems={5} />
+                    </div>
+                )
+            }
+        }
+
+
+
+        ReactDOM.render(<WrapperPage />, document.getElementById('root'));
+
+
+    </script>
+
+
+    {{ next_button }}
+
+    {{ endblock }}
