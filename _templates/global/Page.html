@@ -1,8 +1,29 @@
 {% extends "otree/Page.html" %}
 {% load otree static %}
 
-{% block global_styles  %}
+{% block global_styles %}
+<style>
+    body {
+        background-color: #ffc107;
+    }
+
+    .otree-body {
+        background-color: #ffffff;
+        border-radius: 10px;
+    }
+
+    .otree-title {
+        padding-top: 2%;
+        padding-bottom: 2%;
+        border-bottom: 5px solid #198754;
+    }
+
+    .otree-btn-next {
+        background-color: #198754;
+        border-color: #198754;
+    }
+</style>
 {% endblock %}
 
-{% block global_scripts  %}
+{% block global_scripts %}
 {% endblock %}

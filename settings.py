@@ -1,11 +1,11 @@
 from os import environ
 
 SESSION_CONFIGS = [
-    # dict(
-    #     name='public_goods',
-    #     app_sequence=['public_goods'],
-    #     num_demo_participants=3,
-    # ),
+    dict(
+        name="choice_experiment",
+        app_sequence=["choice_experiment"],
+        num_demo_participants=1,
+    ),
 ]
 
 # if you set a property in SESSION_CONFIG_DEFAULTS, it will be inherited by all configs
@@ -22,16 +22,16 @@ SESSION_FIELDS = []
 
 # ISO-639 code
 # for example: de, fr, ja, ko, zh-hans
-LANGUAGE_CODE = 'en'
+LANGUAGE_CODE = "en"
 
 # e.g. EUR, GBP, CNY, JPY
-REAL_WORLD_CURRENCY_CODE = 'USD'
+REAL_WORLD_CURRENCY_CODE = "USD"
 USE_POINTS = True
 
-ADMIN_USERNAME = 'admin'
+ADMIN_USERNAME = "admin"
 # for security, best to set admin password in an environment variable
-ADMIN_PASSWORD = environ.get('OTREE_ADMIN_PASSWORD')
+ADMIN_PASSWORD = environ.get("OTREE_ADMIN_PASSWORD")
 
 DEMO_PAGE_INTRO_HTML = """ """
 
-SECRET_KEY = '1355630974816'
+SECRET_KEY = "1355630974816"
