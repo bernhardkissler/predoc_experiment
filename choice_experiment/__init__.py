@@ -22,7 +22,10 @@ class Group(BaseGroup):
 
 
 class Player(BasePlayer):
-    pass
+    binary_choice_simple_choose_risky = models.BooleanField(
+        choices=[[True, "Option A"], [False, "Option B"],],
+        label="What certain amount do you choose?",
+    )  # Encodes choosing the risky option A as True and the safe option B as False for easier storage
 
 
 # PAGES
@@ -39,7 +42,8 @@ class ComprehensionPage(Page):
 
 
 class BinaryChoiceSimplePage(Page):
-    pass
+    form_model = "player"
+    form_fields = ["binary_choice_simple_choose_risky"]
 
 
 class BinaryChoiceListPage(Page):

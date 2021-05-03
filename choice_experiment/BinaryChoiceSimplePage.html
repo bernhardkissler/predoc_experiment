@@ -5,15 +5,44 @@
 A simple choice?
 {{ endblock }}
 {{ block content }}
-<p>
-    TODOS
-<ul>
-    <li></li>
-</ul>
-</p>
+
+<div id="decision_table">
+    <table class="table table-bordered border-secondary">
+        <thead>
+            <tr>
+                <td class="text-center align-middle">
+                    <strong>
+                        Option A
+                    </strong>
+                </td>
+                <td class="text-center align-middle">
+                    <strong>
+                        Option B
+                    </strong>
+                </td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="width: 50%;" class="text-center align-middle">
+                    With probability <strong>70%</strong>: Get <strong>$20</strong>
+                    <br>
+                    With probability <strong>30%</strong>: Get <strong>$0</strong>
+                </td>
+                <td style="width: 50%;" class="text-center align-middle">
+                    Get <strong>$8</strong> for certain (100%)
 
 
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>
 {{ formfields }}
+
+
+
 {{ next_button }}
 
 {{ endblock }}
