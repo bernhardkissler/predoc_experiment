@@ -6,8 +6,108 @@ A bit trickier
 {{ endblock }}
 {{ block content }}
 
+<input type="hidden" id="binary_choice_list_choose_risky" name="binary_choice_list_choose_risky" value="-9999"></input>
 
-{{ formfields }}
+<div id="root"></div>
+
+<!-- Load React -->
+<script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+
+<!-- Load Babel -->
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+
+<script type="text/babel">
+    class WrapperPage extends React.Component {
+        state = {
+            listItems: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        }
+
+
+        oneChangeHandler = (e) => {
+            let listItems = this.state.listItems
+            for (let i = 0; i < listItems.length; i++) {
+                if (i < e.target.value) {
+                    listItems[i] = 1
+                } else {
+                    listItems[i] = 0
+                }
+            }
+            for (let i = 0; i < listItems.length; i++) {
+                if (listItems[i] === 0) {
+                    document.getElementById("group_" + (i).toString() + "1").checked = true
+                    document.getElementById("group_" + (i).toString() + "0").checked = false
+                } else {
+                    document.getElementById("group_" + (i).toString() + "1").checked = false
+                    document.getElementById("group_" + (i).toString() + "0").checked = true
+
+                }
+
+            }
+            document.getElementById("binary_choice_list_choose_risky").value = e.target.value
+            console.log(listItems)
+            console.log(e.target.value)
+        }
+
+        render() {
+
+
+            let rows = []
+            for (let i = 0; i < this.state.listItems.length; i++) {
+                rows.push(
+                    <tr>
+                        <td className="text-center align-middle">
+                            <input type="radio" onClick={this.oneChangeHandler} id={"group_" + i + "0"} value={i + 1} name={"group_" + i} /> {" "}
+                            <input type="radio" onClick={this.oneChangeHandler} id={"group_" + i + "1"} value={i} name={"group_" + i} />
+                        </td>
+                        <td className="text-center align-middle">With certainty: <strong>Get ${i}</strong></td>
+                    </tr>
+                )
+            }
+            return (
+                <div id="decision_table">
+                    <table className="table table-bordered border-secondary">
+                        <thead>
+                            <tr>
+                                <td className="text-center align-middle">
+                                    <strong>
+                                        Option A
+                                    </strong>
+                                </td>
+                                <td className="text-center align-middle">
+                                </td>
+                                <td className="text-center align-middle">
+                                    <strong>
+                                        Option B
+                                    </strong>
+                                </td>
+                            </tr>
+                        </thead >
+                        <tbody>
+                            <tr>
+                                <td className="text-center align-middle" rowspan={this.state.listItems.length + 1}>
+                                    With probability <strong>70%</strong>: Get <strong>$20</strong>
+                                    <br></br>
+                                        With probability <strong>30%</strong>: Get <strong>$0</strong>
+                                </td>
+                            </tr>
+                            {rows}
+                        </tbody>
+                    </table >
+                </div >
+            )
+        }
+    }
+
+
+
+    ReactDOM.render(<WrapperPage />, document.getElementById('root'));
+
+
+</script>
+
+
 {{ next_button }}
 
 {{ endblock }}

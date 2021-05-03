@@ -26,6 +26,9 @@ class Player(BasePlayer):
         choices=[[True, "Option A"], [False, "Option B"],],
         label="What certain amount do you choose?",
     )  # Encodes choosing the risky option A as True and the safe option B as False for easier storage
+    binary_choice_list_choose_risky = (
+        models.IntegerField()
+    )  # Encodes the number of safe options (on the right side) for which the participant prefers the risky option
 
 
 # PAGES
@@ -47,7 +50,13 @@ class BinaryChoiceSimplePage(Page):
 
 
 class BinaryChoiceListPage(Page):
-    pass
+    form_model = "player"
+    form_fields = ["binary_choice_list_choose_risky"]
+
+    @staticmethod
+    def error_message(player, values):
+        if values["binary_choice_list_choose_risky"] == -9999:
+            return "Please enter your preference before trying to proceed."
 
 
 class PayoffPage(Page):
