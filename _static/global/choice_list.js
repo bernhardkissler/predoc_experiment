@@ -3,6 +3,15 @@ class ChoiceList extends React.Component {
         listItems: new Array(this.props.initialListItems).fill(0)
     }
 
+    componentDidMount() {
+        if (this.props.deactivated == true) {
+            for (let i = 0; i < this.state.listItems.length; i++) {
+                document.getElementById("group_" + (i).toString() + "1").disabled = true
+                document.getElementById("group_" + (i).toString() + "0").disabled = true
+            }
+        }
+    }
+
     oneChangeHandler = (e) => {
         let listItems = this.state.listItems
         for (let i = 0; i < listItems.length; i++) {

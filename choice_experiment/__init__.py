@@ -154,22 +154,27 @@ class PayoffPage(Page):
                     player.payoff = selected_choice["pay_down"]
         elif selected_choice["type"] == "list":
             rnd_offer = random.choice(selected_choice["lables_choice_list"])
+            player_offer = player.in_round(
+                selected_round + 1
+            ).binary_choice_list_choose_risky
             if (
-                rnd_offer
-                >= player.in_round(selected_round + 1).binary_choice_list_choose_risky
+                rnd_offer >= player_offer
             ):  # the random number is bigger than the biggest Option A - value in the price list ==> Receive Option B
                 player.payoff = rnd_offer
-                chosen_text = f"You chose the safe Option B if it was higher than {player.in_round(selected_round + 1).binary_choice_list_choose_risky}. An offer of {rnd_offer} was randomly made meaning that you receive Option B."
-
+                chosen_text = f"You chose the safe Option B if it was higher than ${player_offer}. An offer of ${rnd_offer} was randomly made meaning that you receive Option B."
             else:  # ==> Receive Option A (resolved like for simple question)
                 rnd_draw = random.randrange(1, 101)
                 if rnd_draw <= selected_choice["prob_up"]:
-                    chosen_text = f"You chose the safe Option B if it was higher than {player.in_round(selected_round + 1).binary_choice_list_choose_risky}. An offer of {rnd_offer} was randomly made meaning that you receive Option A. You won the higher bonus."
-
+                    if player_offer > max(selected_choice["lables_choice_list"]):
+                        chosen_text = f"You chose not to take option B for any of the amounts meaning that you receive Option A. You won the higher bonus."
+                    else:
+                        chosen_text = f"You chose the safe Option B if it was higher than ${player_offer}. An offer of ${rnd_offer} was randomly made meaning that you receive Option A. You won the higher bonus."
                     player.payoff = selected_choice["pay_up"]
                 else:
-                    chosen_text = f"You chose the safe Option B if it was higher than {player.in_round(selected_round + 1).binary_choice_list_choose_risky}. An offer of {rnd_offer} was randomly made meaning that you receive Option A. You won the lower bonus."
-
+                    if player_offer > max(selected_choice["lables_choice_list"]):
+                        chosen_text = f"You chose not to take option B for any of the amounts meaning that you receive Option A. You won the lower bonus."
+                    else:
+                        chosen_text = f"You chose the safe Option B if it was higher than ${player_offer}. An offer of ${rnd_offer} was randomly made meaning that you receive Option A. You won the lower bonus."
                     player.payoff = selected_choice["pay_down"]
         print(player.payoff)
 
