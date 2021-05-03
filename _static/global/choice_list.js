@@ -71,9 +71,9 @@ class ChoiceList extends React.Component {
                     <tbody>
                         <tr>
                             <td className="text-center align-middle" rowspan={this.state.listItems.length + 1}>
-                                With probability <strong>{this.props.prob_up}%</strong>: Get <strong>${this.props.win_up}</strong>
+                                With probability <strong>{this.props.prob_up}%</strong>: Get <strong>${this.props.pay_up}</strong>
                                 <br></br>
-                                    With probability <strong>{prob_down}%</strong>: Get <strong>${this.props.win_down}</strong>
+                                    With probability <strong>{prob_down}%</strong>: Get <strong>${this.props.pay_down}</strong>
                             </td>
                         </tr>
                         {rows}

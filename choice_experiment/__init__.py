@@ -85,9 +85,9 @@ class BinaryChoiceSimplePage(Page):
         return dict(
             prob_up=choices_data[f"choice_{player.round_number}"]["prob_up"],
             prob_down=100 - choices_data[f"choice_{player.round_number}"]["prob_up"],
-            win_up=choices_data[f"choice_{player.round_number}"]["win_up"],
-            win_down=choices_data[f"choice_{player.round_number}"]["win_down"],
-            certain_pay=choices_data[f"choice_{player.round_number}"]["certain_pay"],
+            pay_up=choices_data[f"choice_{player.round_number}"]["pay_up"],
+            pay_down=choices_data[f"choice_{player.round_number}"]["pay_down"],
+            pay_certain=choices_data[f"choice_{player.round_number}"]["pay_certain"],
         )
 
 
@@ -111,8 +111,8 @@ class BinaryChoiceListPage(Page):
         return dict(
             prob_up=choices_data[f"choice_{player.round_number}"]["prob_up"],
             prob_down=100 - choices_data[f"choice_{player.round_number}"]["prob_up"],
-            win_up=choices_data[f"choice_{player.round_number}"]["win_up"],
-            win_down=choices_data[f"choice_{player.round_number}"]["win_down"],
+            pay_up=choices_data[f"choice_{player.round_number}"]["pay_up"],
+            pay_down=choices_data[f"choice_{player.round_number}"]["pay_down"],
             lables_choice_list=choices_data[f"choice_{player.round_number}"][
                 "lables_choice_list"
             ],
@@ -134,13 +134,13 @@ class PayoffPage(Page):
                 player.in_round(selected_round + 1).binary_choice_simple_choose_risky
                 == 0
             ):  # participant chose Option A
-                player.payoff = selected_choice["certain_pay"]
+                player.payoff = selected_choice["pay_certain"]
             else:  # Player chose Option B
                 rnd_draw = random.randrange(1, 101)
                 if rnd_draw <= selected_choice["prob_up"]:
-                    player.payoff = selected_choice["win_up"]
+                    player.payoff = selected_choice["pay_up"]
                 else:
-                    player.payoff = selected_choice["win_down"]
+                    player.payoff = selected_choice["pay_down"]
         elif selected_choice["type"] == "list":
             rnd_offer = random.choice(selected_choice["lables_choice_list"])
             if (
@@ -151,9 +151,9 @@ class PayoffPage(Page):
             else:  # ==> Receive Option A (resolved like for simple question)
                 rnd_draw = random.randrange(1, 101)
                 if rnd_draw <= selected_choice["prob_up"]:
-                    player.payoff = selected_choice["win_up"]
+                    player.payoff = selected_choice["pay_up"]
                 else:
-                    player.payoff = selected_choice["win_down"]
+                    player.payoff = selected_choice["pay_down"]
         print(player.payoff)
         return {"selected_round": selected_round + 1, "payoff": player.payoff}
 
