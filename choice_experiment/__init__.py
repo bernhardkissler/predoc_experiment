@@ -1,10 +1,14 @@
+from os import stat
 from otree.api import *
+import random
 
 c = Currency
 
 doc = """
 Your app description
 """
+
+from choice_experiment.question_data import choices_data
 
 
 class Constants(BaseConstants):
@@ -36,8 +40,6 @@ class Player(BasePlayer):
         models.IntegerField()
     )  # Encodes the number of safe options (on the right side) for which the participant prefers the risky option
 
-
-from choice_experiment.question_data import choices_data
 
 # PAGES
 class WelcomePage(Page):
@@ -102,7 +104,7 @@ class BinaryChoiceListPage(Page):
     @staticmethod
     def error_message(player, values):
         if values["binary_choice_list_choose_risky"] == -9999:
-            return "Please enter your preference before trying to proceed."
+            return "Please enter your preferences before trying to proceed."
 
     @staticmethod
     def js_vars(player: Player):
@@ -121,6 +123,39 @@ class PayoffPage(Page):
     @staticmethod
     def is_displayed(player: Player):
         return player.round_number == 4
+
+    @staticmethod
+    def vars_for_template(player: Player):
+        selected_round = random.randrange(4)  # randomly select a round
+        selected_choice = choices_data[f"choice_{selected_round + 1}"]
+        print(selected_choice)
+        if selected_choice["type"] == "simple":
+            if (
+                player.in_round(selected_round + 1).binary_choice_simple_choose_risky
+                == 0
+            ):  # participant chose Option A
+                player.payoff = selected_choice["certain_pay"]
+            else:  # Player chose Option B
+                rnd_draw = random.randrange(1, 101)
+                if rnd_draw <= selected_choice["prob_up"]:
+                    player.payoff = selected_choice["win_up"]
+                else:
+                    player.payoff = selected_choice["win_down"]
+        elif selected_choice["type"] == "list":
+            rnd_offer = random.choice(selected_choice["lables_choice_list"])
+            if (
+                rnd_offer
+                >= player.in_round(selected_round + 1).binary_choice_list_choose_risky
+            ):  # the random number is bigger than the biggest Option A - value in the price list ==> Receive Option B
+                player.payoff = rnd_offer
+            else:  # ==> Receive Option A (resolved like for simple question)
+                rnd_draw = random.randrange(1, 101)
+                if rnd_draw <= selected_choice["prob_up"]:
+                    player.payoff = selected_choice["win_up"]
+                else:
+                    player.payoff = selected_choice["win_down"]
+        print(player.payoff)
+        return {"selected_round": selected_round + 1, "payoff": player.payoff}
 
 
 page_sequence = [
