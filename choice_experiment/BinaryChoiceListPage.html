@@ -2,7 +2,7 @@
 {% load otree %}
 
 {{ block title }}
-A bit trickier
+Somewhat trickier
 {{ endblock }}
 {{ block content }}
 
@@ -27,6 +27,9 @@ A bit trickier
         render() {
             return (
                 <div>
+                    <p>
+                        Please tell us your preferences below.
+                        </p>
                     <ChoiceList prob_up={js_vars.prob_up} pay_up={js_vars.pay_up} pay_down={js_vars.pay_down} initialListItems={js_vars.lables_choice_list.length} listLabels={js_vars.lables_choice_list} deactivated={false} />
                 </div>
             )

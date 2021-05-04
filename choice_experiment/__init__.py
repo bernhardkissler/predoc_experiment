@@ -32,9 +32,18 @@ class Player(BasePlayer):
     understanding_question_2 = models.IntegerField(
         label="How many options will you be offered during the first 3 rounds?"
     )
+    understanding_question_3 = models.IntegerField(
+        label="Assume that the last round was selected to determine your bonus. The random offer is for one of the rows in which you indicated you would prefer option B. How will your bonus be determined?",
+        choices=[
+            [1, "I receive option A and the lottery is resolved randomly"],
+            [2, "I receive option B and my bonus is the 'offered' value."],
+            [3, "I don't know"],
+        ],
+        widget=widgets.RadioSelect,
+    )
     binary_choice_simple_choose_risky = models.BooleanField(
         choices=[[True, "Option A"], [False, "Option B"],],
-        label="What certain amount do you choose?",
+        label="Which option do you choose?",
     )  # Encodes choosing the risky option A as True and the safe option B as False for easier storage
     binary_choice_list_choose_risky = (
         models.IntegerField()
@@ -56,7 +65,11 @@ class InstructionsPage(Page):
 
 class ComprehensionPage(Page):
     form_model = "player"
-    form_fields = ["understanding_question_1", "understanding_question_2"]
+    form_fields = [
+        "understanding_question_1",
+        "understanding_question_2",
+        "understanding_question_3",
+    ]
 
     @staticmethod
     def is_displayed(player: Player):
@@ -64,8 +77,10 @@ class ComprehensionPage(Page):
 
     @staticmethod
     def before_next_page(player, timeout_happened):
-        correct_check = (player.understanding_question_1 == 1) and (
-            player.understanding_question_2 == 2
+        correct_check = (
+            (player.understanding_question_1 == 1)
+            and (player.understanding_question_2 == 2)
+            and (player.understanding_question_3 == 2)
         )
         player.participant.vars["correct_check"] = correct_check
 
@@ -132,7 +147,7 @@ class BinaryChoiceListPage(Page):
                 player.in_round(selected_round + 1).binary_choice_simple_choose_risky
                 == 0
             ):  # participant chose Option B
-                chosen_text = "You chose the safe Option B"
+                chosen_text = "You chose the safe Option B."
                 player.payoff = selected_choice["pay_certain"]
             else:  # Player chose Option A
                 rnd_draw = random.randrange(1, 101)
