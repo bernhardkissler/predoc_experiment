@@ -33,10 +33,10 @@ class Player(BasePlayer):
         label="How many options will you be offered during the first 3 rounds?"
     )
     understanding_question_3 = models.IntegerField(
-        label="Assume that the last round was selected to determine your bonus. The random offer is for one of the rows in which you indicated you would prefer option B. How will your bonus be determined?",
+        label="Assume that the last round was selected to determine your bonus. The random offer is for one of the rows in which you indicated you would prefer Option B. How will your bonus be determined?",
         choices=[
-            [1, "I receive option A and the lottery is resolved randomly"],
-            [2, "I receive option B and my bonus is the 'offered' value."],
+            [1, "I receive Option A and the lottery is resolved randomly"],
+            [2, "I receive Option B and my bonus is the 'offered' value."],
             [3, "I don't know"],
         ],
         widget=widgets.RadioSelect,
@@ -44,7 +44,7 @@ class Player(BasePlayer):
     binary_choice_simple_choose_risky = models.BooleanField(
         choices=[[True, "Option A"], [False, "Option B"],],
         label="Which option do you choose?",
-    )  # Encodes choosing the risky option A as True and the safe option B as False for easier storage
+    )  # Encodes choosing the risky Option A as True and the safe Option B as False for easier storage
     binary_choice_list_choose_risky = (
         models.IntegerField()
     )  # Encodes the number of safe options (on the right side) for which the participant prefers the risky option
@@ -153,12 +153,12 @@ class BinaryChoiceListPage(Page):
                 rnd_draw = random.randrange(1, 101)
                 if rnd_draw <= selected_choice["prob_up"]:
                     chosen_text = (
-                        "You chose the risky Option A and won the higher bonus."
+                        "You chose the lottery Option A and won the higher bonus."
                     )
                     player.payoff = selected_choice["pay_up"]
                 else:
                     chosen_text = (
-                        "You chose the risky Option B and won the lower bonus."
+                        "You chose the certain Option B and won the lower bonus."
                     )
                     player.payoff = selected_choice["pay_down"]
         elif selected_choice["type"] == "list":
@@ -175,13 +175,13 @@ class BinaryChoiceListPage(Page):
                 rnd_draw = random.randrange(1, 101)
                 if rnd_draw <= selected_choice["prob_up"]:
                     if player_offer > max(selected_choice["lables_choice_list"]):
-                        chosen_text = f"You chose not to take option B for any of the amounts meaning that you receive Option A. You won the higher bonus."
+                        chosen_text = f"You chose not to take Option B for any of the amounts meaning that you receive Option A. You won the higher bonus."
                     else:
                         chosen_text = f"You chose the safe Option B if it was higher than ${player_offer}. An offer of ${rnd_offer} was randomly made meaning that you receive Option A. You won the higher bonus."
                     player.payoff = selected_choice["pay_up"]
                 else:
                     if player_offer > max(selected_choice["lables_choice_list"]):
-                        chosen_text = f"You chose not to take option B for any of the amounts meaning that you receive Option A. You won the lower bonus."
+                        chosen_text = f"You chose not to take Option B for any of the amounts meaning that you receive Option A. You won the lower bonus."
                     else:
                         chosen_text = f"You chose the safe Option B if it was higher than ${player_offer}. An offer of ${rnd_offer} was randomly made meaning that you receive Option A. You won the lower bonus."
                     player.payoff = selected_choice["pay_down"]
