@@ -196,28 +196,44 @@ class PayoffPage(Page):
 
     @staticmethod
     def vars_for_template(player: Player):
-        selected_choice = player.participant.vars["selected_choice"]
-        selected_round = player.participant.vars["selected_round"]
-        chosen_text = player.participant.vars["chosen_text"]
+        correct_check = player.participant.vars["correct_check"]
+        if correct_check:
+            selected_choice = player.participant.vars["selected_choice"]
+            selected_round = player.participant.vars["selected_round"]
+            chosen_text = player.participant.vars["chosen_text"]
 
-        return {
-            "chosen_text": chosen_text,
-            "selected_round": selected_round + 1,
-            "payoff": player.payoff,
-            "round_type": selected_choice["type"],
-        }
+            res = {
+                "chosen_text": chosen_text,
+                "selected_round": selected_round + 1,
+                "payoff": player.payoff,
+                "round_type": selected_choice["type"],
+                "correct_check": correct_check,
+            }
+        else:
+            res = {
+                "payoff": player.payoff,
+                "correct_check": correct_check,
+            }
+
+        return res
 
     @staticmethod
     def js_vars(player: Player):
-        selected_choice = player.participant.vars["selected_choice"]
-        return dict(
-            prob_up=selected_choice["prob_up"],
-            pay_up=selected_choice["pay_up"],
-            pay_down=selected_choice["pay_down"],
-            pay_certain=selected_choice["pay_certain"],
-            lables_choice_list=selected_choice["lables_choice_list"],
-            round_type=selected_choice["type"],
-        )
+        correct_check = player.participant.vars["correct_check"]
+        if correct_check:
+            selected_choice = player.participant.vars["selected_choice"]
+
+            res = dict(
+                prob_up=selected_choice["prob_up"],
+                pay_up=selected_choice["pay_up"],
+                pay_down=selected_choice["pay_down"],
+                pay_certain=selected_choice["pay_certain"],
+                lables_choice_list=selected_choice["lables_choice_list"],
+                round_type=selected_choice["type"],
+            )
+        else:
+            res = dict()
+        return res
 
 
 page_sequence = [

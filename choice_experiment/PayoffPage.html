@@ -16,6 +16,8 @@ What you won
 <!-- Load ChoiceList and ChoiceSimple Component -->
 <script type="text/babel" src="{{ static 'global/choice_list.js'}}"></script>
 <script type="text/babel" src="{{ static 'global/choice_simple.js'}}"></script>
+
+{{if correct_check == True}}
 <p>
     Round {{selected_round}} was randomly selected to determine your bonus. In it you were offered the following
     options:
@@ -62,6 +64,15 @@ What you won
 
 
 </script>
+
+{{else}}
+<p>
+    Unfortunately you answered our comprehension questions incorrectly. The quality of the experimental data is
+    extremely important to us and we cannot let you take part in the experiment. This means your bonus is
+    {{player.payoff|to0}}.
+
+</p>
+{{endif}}
 
 
 
