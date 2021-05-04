@@ -5,7 +5,7 @@ import random
 c = Currency
 
 doc = """
-Your app description
+A minimal choice experiment; The question data is in an external file; 'Big' custom user interfaces are implemented as React components and kept in their own files for easy reuse. The whole experiment is implemented in one app to keep imports and participant.vars between apps to a minimum. Had it grown much larger, I would have probably broken it up into an intro part (WelcomePage --> ComprehensionPage), a main app (BinaryChoiceSimplePage & BinaryChoiceListPage) and a results app (PayoffPage), which would have allowed for an easier data set at the end. Still a short script should be sufficient to fix the empty fields caused by the round-mechanic.
 """
 
 from choice_experiment.question_data import choices_data

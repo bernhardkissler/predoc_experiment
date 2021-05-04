@@ -93,7 +93,7 @@ What your are going to do
                 <div>
                     <h3>Types of choices</h3>
                     <p>
-                        During the experiment you will make two types of choices. For each choice you will presented with an Option A containing a randomized bonus
+                        During the experiment you will make two types of choices. For each choice you will be presented with an Option A containing a randomized bonus
                         and a certain Option B and be asked which one you prefer. In the end of the experiment, one
                         of the choices you made will be randomly selected to calculate your bonus. That means any of your choices could determine you bonus and you
                         should think about every single one of them carefully.
@@ -126,11 +126,11 @@ What your are going to do
                             gives you instant feedback on how we interpret your inputs.
                             <br></br>
                             The list below is not connected to any of your choices. Feel free to play around with it to get a feeling for
-                            the way it works.
+                            the mechanism.
                         </p>
                     <ChoiceList prob_up={50} pay_up={15} pay_down={3} initialListItems={5} listLabels={[0, 1, 2, 3, 4]} deactivated={false} />
                     <p>
-                        In the end of the experiment, a random row of Option B is selected as our "offer" to you. If you indicated you would take the certain Option B for this amount, you receive Option B. Otherwise, you receive the lottery Option A.
+                        If round 4 is selected to determine your bonus, a random row of Option B is selected as our "offer" to you. If you indicated you would take the certain Option B for this amount, you receive Option B. Otherwise, you receive the lottery Option A which is resolved as described before.
                         </p>
                 </div>
             )

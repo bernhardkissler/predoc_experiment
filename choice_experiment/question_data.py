@@ -1,4 +1,4 @@
-"""A file to collect all choices presented to the participant in one location. This could also be Excel/JSON etc.
+"""A file to collect all choices presented to the participant in one location. This could also be Excel/JSON etc. The idea is to make it easy to add new questions and extend the experiment without changing the main code apart from round_numbers
 """
 
 
