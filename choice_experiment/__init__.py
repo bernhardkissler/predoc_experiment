@@ -44,10 +44,10 @@ class Player(BasePlayer):
     binary_choice_simple_choose_risky = models.BooleanField(
         choices=[[True, "Option A"], [False, "Option B"],],
         label="Which option do you choose?",
-    )  # Encodes choosing the risky Option A as True and the safe Option B as False for easier storage
+    )  # Encodes choosing the risky Option A as True and the certain Option B as False for easier storage
     binary_choice_list_choose_risky = (
         models.IntegerField()
-    )  # Encodes the number of safe options (on the right side) for which the participant prefers the risky option
+    )  # Encodes the number of certain options (on the right side) for which the participant prefers the risky option
 
 
 # PAGES
@@ -137,6 +137,7 @@ class BinaryChoiceListPage(Page):
 
     @staticmethod
     def before_next_page(player: Player, timeout_happened):
+        ## calculate payoff
         selected_round = random.randrange(4)  # randomly select a round
         player.participant.vars["selected_round"] = selected_round
         selected_choice = choices_data[f"choice_{selected_round + 1}"]
@@ -147,7 +148,7 @@ class BinaryChoiceListPage(Page):
                 player.in_round(selected_round + 1).binary_choice_simple_choose_risky
                 == 0
             ):  # participant chose Option B
-                chosen_text = "You chose the safe Option B."
+                chosen_text = "You chose the certain Option B."
                 player.payoff = selected_choice["pay_certain"]
             else:  # Player chose Option A
                 rnd_draw = random.randrange(1, 101)
@@ -170,20 +171,20 @@ class BinaryChoiceListPage(Page):
                 rnd_offer >= player_offer
             ):  # the random number is bigger than the biggest Option A - value in the price list ==> Receive Option B
                 player.payoff = rnd_offer
-                chosen_text = f"You chose the safe Option B if it was higher than ${player_offer}. An offer of ${rnd_offer} was randomly made meaning that you receive Option B."
+                chosen_text = f"You chose the certain Option B if it was higher than ${player_offer}. An offer of ${rnd_offer} was randomly made meaning that you receive Option B."
             else:  # ==> Receive Option A (resolved like for simple question)
                 rnd_draw = random.randrange(1, 101)
                 if rnd_draw <= selected_choice["prob_up"]:
                     if player_offer > max(selected_choice["lables_choice_list"]):
                         chosen_text = f"You chose not to take Option B for any of the amounts meaning that you receive Option A. You won the higher bonus."
                     else:
-                        chosen_text = f"You chose the safe Option B if it was higher than ${player_offer}. An offer of ${rnd_offer} was randomly made meaning that you receive Option A. You won the higher bonus."
+                        chosen_text = f"You chose the certain Option B if it was higher than ${player_offer}. An offer of ${rnd_offer} was randomly made meaning that you receive Option A. You won the higher bonus."
                     player.payoff = selected_choice["pay_up"]
                 else:
                     if player_offer > max(selected_choice["lables_choice_list"]):
                         chosen_text = f"You chose not to take Option B for any of the amounts meaning that you receive Option A. You won the lower bonus."
                     else:
-                        chosen_text = f"You chose the safe Option B if it was higher than ${player_offer}. An offer of ${rnd_offer} was randomly made meaning that you receive Option A. You won the lower bonus."
+                        chosen_text = f"You chose the certain Option B if it was higher than ${player_offer}. An offer of ${rnd_offer} was randomly made meaning that you receive Option A. You won the lower bonus."
                     player.payoff = selected_choice["pay_down"]
         print(player.payoff)
         player.participant.vars["chosen_text"] = chosen_text
