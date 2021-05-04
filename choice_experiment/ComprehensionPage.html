@@ -11,6 +11,41 @@ Did you understand everything?
 </p>
 
 {{ formfields }}
-{{ next_button }}
+
+<!-- Modal - Popup -->
+<!-- Button trigger modal -->
+<button type="button" class="otree-btn-next btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    Next
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="exampleModalLabel"><strong>Important - Are you sure?</strong></h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    Before you continue please make sure you answered these questions correctly, as <strong> incorrect
+                        answers will result in your being disqualified </strong> for the rest of this experiment. This
+                    means if you answer incorrectly, you won't answer any further questions and you won't receive any
+                    bonus.
+                </p>
+                <p>
+                    This message does not necessarily mean that you did answer something wrong. So <strong> don't change
+                        anything of which you are certain. </strong> It is merely meant focus your attention.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-ligth" data-bs-dismiss="modal">Close</button>
+                <button class="otree-btn-next btn btn-primary">Next</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- End Modal -->
 
 {{ endblock }}
